@@ -1,17 +1,46 @@
 console.log('Loaded!');
 // change the index text
-var element = document.getElementById('main-text');
-element.innerHTML = 'let\'s make our blog';
+var button = document.getElementById('counter');
 
-// move the image
-var img = document.getElementById('sri');
+button.onclick = function(){
 
-var marginLeft = 0;
+	var request = new XMLHttpRequest();
 
-function moveRight() {
-   marginLeft = marginLeft + 5 ;
-   img.style.marginLeft = marginLeft + 'px' ;
-}
-img.onclick = function () {
-	var interval  = setInterval(moveRight, 50);
-}
+	request.onreadystatechange = function(){
+       if(request.readyState === XMLHttpRequest.DONE) {
+       	 if (request.status === 200) {
+       		var counter = request.responseText;
+       		var span = document.getElementById('count');
+ 			span.innerHTML = counter.toString();
+       	   }
+       	}
+	};
+ request.open('GET','http://svusirikala7.imad.hasura-app.io/counter', true);
+ request.send(null);
+};
+
+var submit = document.getElementById('submit_btn');
+submit.onclick = function() {
+	var request = new XMLHttpRequest();
+	
+
+	request.onreadystatechange = function(){
+       if(request.readyState === XMLHttpRequest.DONE) {
+       	  if (request.status === 200) {
+       	 	 var names = request.responseText;
+       		 names = JSON.parse(names);     		
+       		 var list = '';
+		     for( var i=0; i < namelistes.length; i++) {
+			   list += '<li>' + names[i] + '</li>' ;
+			 }
+	         var ul = document.getElementById('namelist');
+	         ul.innerHTML = list ;
+	        }
+	    }
+    };
+    var nameInput = document.getElementById('name');
+    var name = nameInput.value;
+    request.open('GET','http://svusirikala7.imad.hasura-app.io/submit-name?name=' + name, true);
+//    request.open('GET','localhost:8080/submit-name?name=' + name, true);
+    request.send(null);
+};
